@@ -17,8 +17,7 @@ then
 			echo "$line"
 			
 	        # echo "./transcode-video.sh --720p --fix_rotation \"$line\""
-			output="$("$script_path"/transcode-video.sh --720p --fix_rotation --no_logs "$line" &)"
-			# output=$("$script_path"/exit.sh --720p --fix_rotation "$line")
+			output="$("$script_path"/transcode-video.sh --720p --trash_original --fix_rotation --no_logs "$line" &)"
 			
 			echo "$output"
 	        ((i++))

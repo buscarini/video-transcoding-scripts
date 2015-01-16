@@ -51,6 +51,8 @@ usage() {
 	--fix_rotation	tries to read the rotation metadata and rotates the video using the ffmpeg
 	
 	--no_logs		disables the creation of log files
+	
+	--trash_original moves to trash the original file if the transcoded one is created successfully
 
     --version       output version information and exit
 
@@ -253,6 +255,7 @@ auto_deinterlace='yes'
 passthru_options=''
 fix_rotation=''
 no_logs=''
+trash_original=''
 debug=''
 
 while [ "$1" ]; do
@@ -492,6 +495,9 @@ while [ "$1" ]; do
 		--no_logs)
 			no_logs='yes'
 			;;
+		--trash_original)
+			trash_original='yes'
+			;;
         --debug)
             debug='yes'
             ;;
@@ -536,6 +542,7 @@ done
 # INPUT
 #
 input="$1"
+readonly original_input="$input"
 
 if [ ! "$input" ]; then
     syntax_error 'too few arguments'
@@ -1378,5 +1385,9 @@ time {
                 mp4track --track-index $forced_subtitle_track_id --enabled true "$output" || exit 1
             fi
         fi
+		
+		if [ "$trash_original" ]; then
+			trash "$original_input"
+		fi
     fi
 }
