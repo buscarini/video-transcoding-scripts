@@ -10,7 +10,7 @@ script_path="$(cd "$(dirname "$0")" && pwd)"
 
 if [[ -d "$input" ]];
 then
-	files="$(find "$input" -name "*.mov")"
+	files="$(find "$input" -iname "*.mov")"
 	# file="$(sed -n 1p <<< "$files")"
 	
 	echo "$files" | while read line; do
