@@ -593,23 +593,39 @@ if [ "$fix_rotation" ]; then
 	echo "Detected rotation: $rotation"
 
 	if [[ rotation -eq 90 ]]; then
-		rotation_option="transpose=1"
+		rotation_option="--rotate=4"
 	elif [[ rotation -eq 180 ]]; then
-		rotation_option="transpose=2,transpose=2"
+		rotation_option="--rotate=3"
 	elif [[ rotation -eq 270 ]]; then
-		rotation_option="transpose=2"
-	fi
-
-	if [ "$rotation_option" ]; then
-		echo "with rotation option"
-		readonly input_extension="${input##*.}"
-		readonly temporal="$(basename "$input" | sed 's/\.[0-9A-Za-z]\{1,\}$//')_temp.$input_extension"
-
-		echo "ffmpeg -y -i \"$input\" -vf \"$rotation_option\" -crf 18 -acodec copy \"$temporal\""
-		rotation_result=$(ffmpeg -y -i "$input" -vf "$rotation_option" -crf 18 -acodec copy -nostdin "$temporal")
-		input="$temporal"
+		rotation_option="--rotate=7"
 	fi
 fi
+
+# if [ "$fix_rotation" ]; then
+# 	rotation_option=""
+# 	echo "ffmpeg -y -i \"$input\" 2>&1 | grep rotate | awk '{print \$3}'"
+# 	rotation=$(ffmpeg -y -i "$input" -nostdin 2>&1 | grep rotate | awk '{print $3}')
+#
+# 	echo "Detected rotation: $rotation"
+#
+# 	if [[ rotation -eq 90 ]]; then
+# 		rotation_option="transpose=1"
+# 	elif [[ rotation -eq 180 ]]; then
+# 		rotation_option="transpose=2,transpose=2"
+# 	elif [[ rotation -eq 270 ]]; then
+# 		rotation_option="transpose=2"
+# 	fi
+#
+# 	if [ "$rotation_option" ]; then
+# 		echo "with rotation option"
+# 		readonly input_extension="${input##*.}"
+# 		readonly temporal="$(basename "$input" | sed 's/\.[0-9A-Za-z]\{1,\}$//')_temp.$input_extension"
+#
+# 		echo "ffmpeg -y -i \"$input\" -vf \"$rotation_option\" -crf 18 -acodec copy \"$temporal\""
+# 		rotation_result=$(ffmpeg -y -i "$input" -vf "$rotation_option" -crf 18 -acodec copy -nostdin "$temporal")
+# 		input="$temporal"
+# 	fi
+# fi
 
 if [ -e "$output" ]; then
     die "output file already exists: $output"
@@ -1333,6 +1349,30 @@ fi
 echo "Transcoding: $input" >&2
 
 time {
+	
+	# echo "HandBrakeCLI \
+#         $title_options \
+#         $section_options \
+#         --markers \
+#         --encoder x264 \
+#         $preset_options \
+#         $tune_options \
+#         --encopts $encopts_options \
+#         $level_options \
+#         --quality $rate_factor \
+#         $frame_rate_options \
+#         $audio_options \"$audio_track_name_list\" \
+#         $crop_options \
+#         $size_options \
+#         $filter_options \
+# 		$rotation_option \
+#         $subtitle_options \
+#         $srt_options \
+#         $passthru_options \
+#         --input \"$input\" \
+#         --output \"$output\" \
+#         2>&1 | tee -a \"${output}.log\""
+	
     HandBrakeCLI \
         $title_options \
         $section_options \
@@ -1348,6 +1388,7 @@ time {
         $crop_options \
         $size_options \
         $filter_options \
+ 		$rotation_option \
         $subtitle_options \
         $srt_options \
         $passthru_options \
