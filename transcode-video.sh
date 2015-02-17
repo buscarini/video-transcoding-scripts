@@ -601,32 +601,6 @@ if [ "$fix_rotation" ]; then
 	fi
 fi
 
-# if [ "$fix_rotation" ]; then
-# 	rotation_option=""
-# 	echo "ffmpeg -y -i \"$input\" 2>&1 | grep rotate | awk '{print \$3}'"
-# 	rotation=$(ffmpeg -y -i "$input" -nostdin 2>&1 | grep rotate | awk '{print $3}')
-#
-# 	echo "Detected rotation: $rotation"
-#
-# 	if [[ rotation -eq 90 ]]; then
-# 		rotation_option="transpose=1"
-# 	elif [[ rotation -eq 180 ]]; then
-# 		rotation_option="transpose=2,transpose=2"
-# 	elif [[ rotation -eq 270 ]]; then
-# 		rotation_option="transpose=2"
-# 	fi
-#
-# 	if [ "$rotation_option" ]; then
-# 		echo "with rotation option"
-# 		readonly input_extension="${input##*.}"
-# 		readonly temporal="$(basename "$input" | sed 's/\.[0-9A-Za-z]\{1,\}$//')_temp.$input_extension"
-#
-# 		echo "ffmpeg -y -i \"$input\" -vf \"$rotation_option\" -crf 18 -acodec copy \"$temporal\""
-# 		rotation_result=$(ffmpeg -y -i "$input" -vf "$rotation_option" -crf 18 -acodec copy -nostdin "$temporal")
-# 		input="$temporal"
-# 	fi
-# fi
-
 if [ -e "$output" ]; then
     die "output file already exists: $output"
 fi
